@@ -3,12 +3,14 @@
 require_once "class/stat.class.php";
 
 $stat = New Stat(array(
-    1=>40,
-    4=>20,
-    2=>60,
-    2=>45
+    3=>2,
+    2=>4,
+    1=>34,
+    1=>11,
+    1=>1,
+    2=>9
 ));
 
-var_dump($stat->variance());
+var_dump($stat->frequence());
 
 ?>

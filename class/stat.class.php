@@ -70,24 +70,10 @@ class Stat{
         $i = 0;
         foreach ($this->data as $key => $value) {
             # code...
-            $donnees[$i] = ((int) $key * (int) $value) / $this->effectif();
+            $donnees[$i] = (int) $key / $this->effectif();
             $i++;
         }
         return $donnees;
-    }
-    /**
-     * Retourne la fréquence cumulée
-     *
-     * @return int
-     */
-    public function frequence_cumul(){
-        $frequence = $this->frequence();
-        $frequence_cumul =0;
-        for ($i=0; $i < count($frequence); $i++) { 
-            # code...
-            $frequence_cumul += $frequence[$i];
-        }
-        return $frequence_cumul;
     }
     /**
      * Retourne la variance de notre structure statistique
