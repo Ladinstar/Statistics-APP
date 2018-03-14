@@ -10,11 +10,11 @@ class Stat{
     /**
      * Permet d'ajouter une valeur à notre tableau de données statistiques
      *
-     * @param int $value
+     * @param array $value
      * @return void
      */
-    public function addData($value){
-        $this->data[count($this->data)] = (int)$value;
+    public function addData($value = array()){
+        $this->data[count($this->data)] = (array)$value;
     }
     /**
      * Retourne les données de la classe
@@ -39,26 +39,66 @@ class Stat{
      * @return int
      */
     public function effectif(){
-        $nb = 0;
-        foreach ($this->data as $key => $value) {
+        $nbre = 0;
+        for ($i=0; $i < count($this->data); $i++) { 
             # code...
-            $nb += (int) $key;
+            $nbre += $this->data[$i][0];
         }
+        return $nbre;
+    }
+    /**
+     * Effectif cumulé croissant
+     *
+     * @return array
+     */
+    public function effectif_cumule_croissant(){
+        $donnees[0] = $this->data[0][0] * $this->data[0][1];
+        for ($i=0; $i <count($this->data); $i++) { 
+            # code...
+            if($i!=0){
+                $donnees[$i] = $this->data[$i][0] * $this->data[$i][1] + $donnees[$i-1];
+            }
+        } 
+        return $donnees;
+    }
+    /**
+     * Effectif cumulé décroissant
+     *
+     * @return array
+     */
+    public function effectif_cumule_decroissant(){
+
+        $donnees[0] = $this->somme();
+        for ($i=0; $i < count($this->data); $i++) { 
+            # code...
+            if($i!=0){
+                $donnees[$i] = $donnees[$i-1] - $this->data[$i-1][0]*$this->data[$i-1][1];
+            }
+        }
+        return $donnees;
+    }
+    /**
+     * Retourne le somme de notre suite statistique
+     *
+     * @return int
+     */
+    public function somme(){
+        $nb = 0;
+        for ($i=0; $i <count($this->data); $i++) { 
+            # code...
+            $nb += $this->data[$i][0]*$this->data[$i][1];
+        }                           
         return $nb;
     }
     /**
      * Retourne la moyenne de note suite statistique
      *
-     * @return int
+     * @return float
      */
     public function moyenne(){
 
-        $somme = 0;
+        return $this->somme()/$this->effectif();
 
-        foreach($this->data as $key => $value){
-            $somme += (int) $key * (int) $value;
-        }
-        return $somme/$this->effectif();
     }
     /**
      * Retourne le tableau des fréquences
@@ -67,11 +107,9 @@ class Stat{
      */
     public function frequence(){
         $donnees = array();
-        $i = 0;
-        foreach ($this->data as $key => $value) {
+        for ($i=0; $i < count($this->data); $i++) { 
             # code...
-            $donnees[$i] = (int) $key / $this->effectif();
-            $i++;
+            $donnees[$i] = $this->data[$i][0] / $this->effectif();
         }
         return $donnees;
     }
@@ -82,11 +120,11 @@ class Stat{
      */
     public function variance(){
         $variance = 0;
-        foreach ($this->data as $key => $value) {
+        for ($i=0; $i < count($this->data); $i++) { 
             # code...
-            $variance += (int) $key * pow( (int) $value - $this->moyenne(),2);
+            $variance += $this->data[$i][0] * pow($this->data[$i][1]-$this->moyenne(),2);
         }
-        return $variance;
+        return $variance/$this->effectif();
     }
     /**
      * Rétourne l'écart-type de notre suite statistique
